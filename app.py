@@ -25,6 +25,8 @@ def dflow_response():
     elif action == 'test intent':
         fulfill_text = 'hi'
 
+    print(fulfill_text)
+
     return {
         "fulfillmentText": fulfill_text,
         "payload": {
@@ -35,8 +37,7 @@ def dflow_response():
                         "simpleResponse": {
                             "textToSpeech": fulfill_text
                             }
-                        }
-                             ]
+                        }]
                 }
             },
         },
