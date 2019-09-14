@@ -1,16 +1,19 @@
 from flask import Flask, request, make_response, jsonify
+import pprint
 import sys
 
 
 app = Flask(__name__)
+pp = pprint.PrettyPrinter()
 
 
 def dflow_response():
     req = request.get_json(force=True)
 
-    print(req['queryResult'])
+    pp.pprint(req)
+    #print(req['queryResult'])
 
-    action = req['queryResult']['action']
+    action = req['queryResult']['intent']['displayName']
 
 
     return {'fulfillmentText': 'This is a response from webhook.'}
