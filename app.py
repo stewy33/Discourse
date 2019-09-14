@@ -25,7 +25,22 @@ def dflow_response():
     elif action == 'test intent':
         fulfill_text = 'hi'
 
-    return {'fulfillmentText': fulfill_text}
+    return {
+        "fulfillmentText": fulfill_text,
+        "payload": {
+            "google": {
+                "expectUserResponse": 'true',
+                "richResponse": {
+                    "items": [{
+                        "simpleResponse": {
+                            "textToSpeech": fulfill_text
+                            }
+                        }
+                             ]
+                }
+            },
+        },
+    }
 
 
 # Called when dialogflow tries to access our server
