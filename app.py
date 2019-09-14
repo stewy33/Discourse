@@ -14,6 +14,13 @@ def dflow_response():
     #print(req['queryResult'])
 
     action = req['queryResult']['intent']['displayName']
+    
+    if action == 'Ask Question Intent':
+    	pass
+    if action == 'Evaluate Response':
+    	pass
+   	if action == 'test intent':
+   		pass
 
 
     return {'fulfillmentText': 'This is a response from webhook.'}
