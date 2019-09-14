@@ -3,15 +3,14 @@ import sys
 
 
 app = Flask(__name__)
+handler = QandAHandler()
 
 
 def dflow_response():
     req = request.get_json(force=True)
 
-    print(req['queryResult'])
-
-    action = req['queryResult']['action']
-
+    # handler.supply_question()
+    # handler.evaluate_response(response)
 
     return {'fulfillmentText': 'This is a response from webhook.'}
 
