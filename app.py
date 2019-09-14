@@ -19,8 +19,10 @@ def dflow_response():
         fulfill_text = handler.supply_question()
 
     elif action == 'Evaluate Response':
+        print("eval")
         user_input = req['queryResult']['queryText']
         fulfill_text = handler.evaluate_response(user_input)
+        print("fulfill")
 
     elif action == 'test intent':
         fulfill_text = 'hi'
@@ -39,8 +41,8 @@ def dflow_response():
                             }
                         }]
                 }
-            },
-        },
+            }
+        }
     }
 
 
