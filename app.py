@@ -33,13 +33,15 @@ def dflow_response():
         "fulfillmentText": fulfill_text,
         "payload": {
             "google": {
-                "expectUserResponse": 'true',
+                "expectUserResponse": True,
                 "richResponse": {
-                    "items": [{
-                        "simpleResponse": {
-                            "textToSpeech": fulfill_text
+                    "items": [
+                        {
+                            "simpleResponse": {
+                                "textToSpeech": fulfill_text
                             }
-                        }]
+                        }
+                    ]
                 }
             }
         }
