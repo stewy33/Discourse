@@ -39,8 +39,8 @@ def dflow_response():
                             }
                         }]
                 }
-            },
-        },
+            }
+        }
     }
 
 
