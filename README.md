@@ -1,3 +1,3 @@
 # Discourse
 
-![alt text](socrates.png "Logo Title Text 1")
+![alt text](socrates.jpg "Logo Title Text 1")
