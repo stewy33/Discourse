@@ -3,17 +3,14 @@ import pprint
 import requests
 import json
 import numpy as np
-from sklearn.preprocessing import normalize
 
 class QandAHandler:
 
 
     def __init__(self):
         self.q_and_as = [
-            {'question':
-             'How are photosystems involved in photosynthesis?',
-
-             'answer': 'Photons excite chlorophyll which produces energy.'}
+            {'question': 'What kind of fluid is normal saline?',
+             'answer': 'Normal saline is a crystalloid fluid'}
         ]
 
         self.last_q_and_a = None
@@ -28,14 +25,16 @@ class QandAHandler:
         answer = self.last_q_and_a['answer']
 
         url = 'https://api.msturing.org/gen/encode'
-        headers = {'Ocp-Apim-Subscription-Key': '04414dcfaf7c43a4b918e5c14a8bfd0c'}
+        headers = {'Ocp-Apim-Subscription-Key':
+                   '04414dcfaf7c43a4b918e5c14a8bfd0c'}
         payload = json.dumps({'queries': [response, answer]})
 
         req = requests.post(url, headers=headers, data=payload)
-        vec1, vec2 = [np.array(q['vector']) for q in req.json()]
-        score = np.dot(vec1, vec2)
+        vecs = [np.array(q['vector']) for q in req.json()]
+        norm_vecs = [v / np.linalg.norm(v) for v in vecs]
+        score = np.dot(norm_vecs[0], norm_vecs[1])
 
-        if score > 0.9:
+        if score > 0.7:
             return f'You got it - score: {score}'
 
         return f'Sorry, the correct answer is: {answer} - score: {score}'
