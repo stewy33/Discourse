@@ -44,7 +44,7 @@ integers which are used to efficiently index an internal array.'''},
 two children.'''}
         ]
 
-        self.last_q_and_a = None
+        self.q_index = 0
 
         if word_vecs:
             self.word_vecs = word_vecs
@@ -60,13 +60,12 @@ two children.'''}
 
 
     def supply_question(self):
-        #self.last_q_and_a = random.choice(self.q_and_as)
-        self.last_q_and_a = self.q_and_as[1]
-        return self.last_q_and_a['question']
+        return self.q_and_as[self.q_index]['question']
 
 
     def evaluate_response(self, response):
-        keywords = self.last_q_and_a['keywords']
+        keywords = self.q_and_as[self.q_index]['keywords']
+        answer = self.q_and_as[self.q_index]['answer']
 
         scores = []
         for kw_group in keywords:
@@ -79,11 +78,19 @@ two children.'''}
             scores.append(top_score)
 
         score = sum(scores) / len(scores)
+        low_score_kw = [keywords[i][0] for i in range(len(scores))
+                        if scores[i] < 0.6]
+
+        self.q_index = (self.q_index + 1) % len(self.q_and_as)
 
         if score > 0.75:
-            return f'You got it - score: {score}'
+            return 'You got it, good job!'
+        
+        if score > 0.5:
+            return f"""You're getting there, but you forgot to mention these
+keywords: {low_score_kw}."""
 
-        return f'Sorry, the correct answer is: {keywords} - score: {score}'
+        return f'Sorry, the correct answer is: {answer}.'
 
 
 def main():

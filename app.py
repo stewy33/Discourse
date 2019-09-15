@@ -3,8 +3,8 @@ from flask import Flask, request, make_response, jsonify
 from q_and_a import QandAHandler
 
 
-app = Flask(__name__)
 handler = QandAHandler()
+app = Flask(__name__)
 pp = pprint.PrettyPrinter()
 
 
@@ -60,5 +60,9 @@ def index():
     return 'Hi'
 
 
-if __name__ == '__main__':
+def main():
     app.run(debug=True)
+
+
+if __name__ == '__main__':
+    main()
