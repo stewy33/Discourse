@@ -8,9 +8,9 @@ verify_ssl = true
 [packages]
 flask = "*"
 pprint = "*"
-gensim = "*"
 bpython = "*"
 sklearn = "*"
+requests = "*"
 
 [requires]
 python_version = "3.6"
