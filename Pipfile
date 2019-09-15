@@ -10,6 +10,7 @@ flask = "*"
 pprint = "*"
 gensim = "*"
 bpython = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.6"
