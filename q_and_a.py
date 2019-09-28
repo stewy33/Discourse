@@ -1,62 +1,38 @@
-import random
-import pprint
-import requests
-import json
-import numpy as np
-
-def read_word_vecs():
-    with open('../wiki-news-300d-1M-subword.vec', 'r', encoding='utf-8',
-              newline='\n', errors='ignore') as fin:
-        _, _ = map(int, fin.readline().split())
-
-        word_vecs = {}
-        for line in fin:
-            tokens = line.rstrip().split(' ')
-            vec = np.array(list(map(float, tokens[1:])))
-            word_vecs[tokens[0]] = vec / np.linalg.norm(vec)
-
-    return word_vecs
+# import pprint
+import pymagnitude
 
 
 class QandAHandler:
 
 
-    def __init__(self, word_vecs=None):
+    def __init__(self):
         self.q_and_as = [
-            {'question': 'What does it mean for a problem to be in class p?',
-             'keywords': [['polynomial']],
-             'answer': '''If a problem is in class p, there exists a polynomial
-time algorithm to solve it.'''},
+            {'question': '''Following a C3-C7 laminoplasty in a myelopathic
+             patient with cervical stenosis, the most common neurologic
+             complication would manifest with which of the following new
+             postoperative exam findings?''',
+             'keywords': [['bicep'], ['weakness']],
+             'answer': 'Bicep weakness'},
+            
+            {'question': '''Which variables has the strongest
+            association with poor clinical outcomes in patients who undergo
+            expansive laminoplasty for cervical spondylotic myelopathy?''',
+             'keywords': [['angle'], ['small', 'few', '13', 'degrees'],
+                          ['kyphosis']],
+             'answer': 'Local kyphosis angle > 13 degrees'},
 
-            {'question': 'What is a classifier?',
-             'keywords': [['class', 'category']],
-             'answer': '''A classifier classifies inputs into distinct
-categories.'''},
+            {'question': '''Which classification system for cervical myelopathy
+            focuses exclusively on lower extremity function?''',
+             'keywords': [['nurick']],
+             'answer': 'Nurick'},
 
-            {'question': 'What is a hash table?',
-             'keywords': [['hash', 'map'], ['key', 'index']],
-             'answer': '''A hash table is a data structure that hashes keys to
-integers which are used to efficiently index an internal array.'''},
-
-            {'question': 'What is a binary tree?',
-             'keywords': [['two'], ['children', 'subtree']],
-             'answer': '''A binary tree is a tree where every node has at most
-two children.'''}
+            {'question': '''Motor-dominant radiculopathy with weakness of the
+            deltoid''',
+             'keywords': [['motor'], ['radiculopathy'], ['weak'], ['deltoid']]}
         ]
 
         self.q_index = 0
-
-        if word_vecs:
-            self.word_vecs = word_vecs
-        else:
-            self.word_vecs = read_word_vecs()
-
-
-    def similarity(self, w1, w2):
-        if w1 not in self.word_vecs or w2 not in self.word_vecs:
-            return 0
-
-        return np.dot(self.word_vecs[w1], self.word_vecs[w2])
+        self.wv = pymagnitude.Magnitude('../wiki-news-300d-1M-subword.magnitude')
 
 
     def supply_question(self):
@@ -72,8 +48,8 @@ two children.'''}
             top_score = -1
 
             for kw in kw_group:
-                for rw in response.lower().split():
-                    top_score = max(top_score, self.similarity(kw, rw))
+                response_words = response.lower().split()
+                top_score = max(self.wv.similarity(kw, response_words))
 
             scores.append(top_score)
 
@@ -81,16 +57,17 @@ two children.'''}
         low_score_kw = [keywords[i][0] for i in range(len(scores))
                         if scores[i] < 0.6]
 
-        self.q_index = (self.q_index + 1) % len(self.q_and_as)
+        self.q_index = 0 if self.q_index == len(self.q_and_as) else self.q_index + 1
 
         if score > 0.75:
             return 'You got it, good job!'
-        
+
         if score > 0.5:
             return f"""You're getting there, but you forgot to mention these
-keywords: {low_score_kw}."""
+keywords: {low_score_kw}.
+The correct answer is: {answer}"""
 
-        return f'Sorry, the correct answer is: {answer}.'
+        return f'Sorry, the correct answer is: {answer}'
 
 
 def main():
