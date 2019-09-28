@@ -10,6 +10,7 @@ flask = "*"
 pprint = "*"
 bpython = "*"
 requests = "*"
+pymagnitude = "*"
 
 [requires]
 python_version = "3.6"
