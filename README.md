@@ -1,7 +1,10 @@
-# Discourse
-## A study app based on natural language interactions.
+<p align="center">
+  <img width=200 src="socrates.jpg">
+</p>  
 
-![alt text](socrates.jpg "Discourse Logo")
+<h1 align="center">Discourse</h1>
+
+<h3 align="center">A study app based on natural language interactions.</h3>
 
 
 ![alt text](screenshot1.jpg "Discourse welcoming the user to a new study session")
